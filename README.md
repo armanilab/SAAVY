@@ -35,7 +35,7 @@ conda activate torch
 ```
 Run the analysis 
 ```
-python perdict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE"
+python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE"
 ```
 
 ## Fine tune model
