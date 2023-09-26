@@ -39,7 +39,7 @@ python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE"
 ```
 
 ## Fine tune model
-1. download the [VIA image annotator](https://images.duckarmada.com/3DmAPCM5k7xb)
+1. download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
 2. load images into dataset and create polygon masks around them
 
 ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
