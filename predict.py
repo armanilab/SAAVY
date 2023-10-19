@@ -276,17 +276,22 @@ for image in images_meta:
         avg_area = np.average([cell["area"] for cell in image["cells"]]).round(2)
         avg_perimeter = np.average([cell["perimeter"] for cell in image["cells"]]).round(2)
 
-    df = df.append(
-        {
-            "file": image["file"],
-            "count": num_cells,
-            "pct_analyzed": image["pct_area_analyzed"] * 100,
-            "background_intenstiy": image["backgroundIntensity"],
-            "avg_viability": avg_viability,
-            "avg_circularity": avg_circularity,
-            "avg_intensity": avg_intensity,
-            "avg_area": avg_area,
-        },
+
+    df = pd.concat([df,
+        pd.DataFrame(
+            {
+                "file": [image["file"]],
+                "count": [num_cells],
+                "pct_analyzed": [image["pct_area_analyzed"] * 100],
+                "background_intenstiy": [image["backgroundIntensity"]],
+                "avg_viability": [avg_viability],
+                "avg_circularity": [avg_circularity],
+                "avg_intensity": [avg_intensity],
+                "avg_area": [avg_area],
+                "avg_perimeter": [avg_perimeter],
+            }
+        )],
+        
         ignore_index=True,
     )
 try:
