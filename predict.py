@@ -20,10 +20,13 @@ if args.input is None or args.output is None:
 
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-# device = torch.device('cpu')
+
 
 print("Loading model...")
-model = torch.load(args.model)
+if device == torch.device("cpu"):
+    model = torch.load(args.model, map_location=torch.device("cpu"))
+else:
+    model = torch.load(args.model)
 # model = torch.load("debug01.pt")
 print("Model loaded.")
 print("running on device: ", device)
