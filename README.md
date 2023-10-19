@@ -26,6 +26,7 @@ Clone this repository
 git clone https://github.com/armanilab/SAAVY.git
 cd SAAVY
 ```
+Download the [model](https://images.jhsieh.dev/zCbgwe1UQg78/direct) and move it into the SAAVY folder.
 
 Create conda env
 
