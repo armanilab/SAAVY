@@ -18,24 +18,43 @@ SAAVY outputs the viability percent, average spheroid size, total count of spheo
 
 
 ## Basic use
+
+
 Clone this repository
 
 ```
 git clone https://github.com/armanilab/SAAVY.git
 cd SAAVY
 ```
-Create and activate the conda environment
 
-*this may be differnet if you do not have a CUDA GPU, if so, install the packages manually from PyTorch and the rquirements section*
+Create conda env
+
 
 ```
-conda env create -f env.yml 
+conda env create -n torch python=3.9
 conda activate torch
-
 ```
+If you are running mac, you will need to install pytorch with the following command
+```
+pip3 install torch torchvision torchaudio
+```
+Otherwise for windows
+```
+// GPU install requires CUDA toolkit https://developer.nvidia.com/cuda-toolkit
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+//CPU only, slower
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
+```
+
+Other requirements
+```
+pip3 install matplotlib scikit-learn pillow
+```
+
+
 Run the analysis 
 ```
-python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE"
+python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --model "torchFinal.pt"
 ```
 
 ## Fine tune model
