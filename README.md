@@ -72,7 +72,7 @@ python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --m
 
 5. Repeat from step 2 for validation dataset
 
-6. run `python predict.py --input "validation_test123" --output "test123" --model "torchFinal.pt"`
+6. run ``python training.py --training "training/" --validation "validation/"` `
 
 7. model will be saved to working directory
 
