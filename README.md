@@ -48,7 +48,7 @@ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 
 Other requirements
 ```
-pip3 install matplotlib scikit-learn pillow tqdm
+pip3 install matplotlib scikit-learn pillow tqdm pandas opencv-python
 ```
 
 
