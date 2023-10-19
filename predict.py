@@ -10,8 +10,9 @@ import pandas as pd
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("input", help="folder of images to analyze")
-parser.add_argument("output", help="folder to save output images")
+parser.add_argument("--input", help="folder of images to analyze")
+parser.add_argument("--output", help="folder to save output images")
+parser.add_argument("--model", help="path to model")
 args = parser.parse_args()
 if args.input is None or args.output is None:
     print("please provide input and output folders")
@@ -22,7 +23,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 # device = torch.device('cpu')
 
 print("Loading model...")
-model = torch.load("torchDebug01.1.pt")
+model = torch.load(args.model)
 # model = torch.load("debug01.pt")
 print("Model loaded.")
 print("running on device: ", device)
@@ -101,14 +102,10 @@ def segment_instance(
         (x, y), (minorAxisLength, majorAxisLength), angle = cv2.fitEllipse(
             max(contours, key=cv2.contourArea)
         )
-
-        semi_major_axis = majorAxisLength / 2
-        semi_minor_axis = minorAxisLength / 2
-        circularity = round(
-            np.sqrt(pow(semi_major_axis, 2) - pow(semi_minor_axis, 2))
-            / semi_major_axis,
-            2,
-        )
+        perimeter = 0
+        for contour in contours:
+            perimeter += cv2.arcLength(contour, True)
+        
         # Draw the contours on the image
         cv2.drawContours(img, contours, -1, (0, 255, 0), rect_th)
 
@@ -146,11 +143,14 @@ def segment_instance(
             (0, 0, 0),
             1,
         )
+
+        circularity = (4 * np.pi * area) / (perimeter ** 2)
         cell_meta = {
             "viability": viability,
             "circularity": circularity,
             "averageIntensity": averageIntensity,
             "area": area,
+            "perimeter": perimeter,
         }
         cells.append(cell_meta)
     print("background intensity: ", backgroundIntesity)
@@ -251,16 +251,7 @@ for i in range(len(images)):
         print("error saving image: ", files[i])
 
 # make a new dataframe with empty everything
-df = pd.DataFrame(
-    columns=[
-        "file",
-        "count",
-        "avg_viability",
-        "avg_circularity",
-        "avg_intensity",
-        "radius (area / pi)",
-    ]
-)
+df = pd.DataFrame()
 for image in images_meta:
     if image["cells"] == []:
         avg_viability = -1
@@ -280,6 +271,7 @@ for image in images_meta:
             [cell["averageIntensity"] for cell in image["cells"]]
         ).round(2)
         avg_area = np.average([cell["area"] for cell in image["cells"]]).round(2)
+        avg_perimeter = np.average([cell["perimeter"] for cell in image["cells"]]).round(2)
 
     df = df.append(
         {

@@ -20,6 +20,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("training", help="training folder")
 parser.add_argument("validation", help="validation folder")
+parser.add_argument("training_json", help="training json file")
 args = parser.parse_args()
 # import scripts.pytorchVisionScripts.utils as utils
 # from scripts.pytorchVisionScripts.engine import *
@@ -210,7 +211,7 @@ def main():
 
     # we have a train test split so we dont need to do this
 
-    dataset = OrganoidDataset(args.training, "via_region_data.json", False)
+    dataset = OrganoidDataset(args.training, args.training_json, False)
     validationDataset = OrganoidDataset(args.validation, "", False)
     dataLoader = torch.utils.data.DataLoader(
         dataset, batch_size=2, shuffle=True, num_workers=0, collate_fn=utils.collate_fn
