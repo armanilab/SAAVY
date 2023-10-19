@@ -222,7 +222,7 @@ for file in tqdm(files):
         continue
     print(file)
     image, cells, backgroundIntensity = segment_instance(
-        folder + "\\" + file, confidence_thresh=0.8
+        os.path.join(folder,file), confidence_thresh=0.8
     )
     image_total_px = image.shape[0] * image.shape[1]
     sum_area = sum([cell["area"] for cell in cells])
