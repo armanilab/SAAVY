@@ -32,7 +32,7 @@ Create conda env
 
 
 ```
-conda env create -n torch python="input your python version"
+conda env create -n torch python="INPUT YOUR PYTHON VERSION"
 conda activate torch
 ```
 If you are running mac, you will need to install pytorch with the following command
