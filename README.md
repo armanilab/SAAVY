@@ -5,47 +5,33 @@ SAAVY was created for the purpose of predicting the viability percentage of 3D t
 SAAVY outputs the viability percent, average spheroid size, total count of spheorids included in the analysis, the total percent area of the image analyzed, and the average intensity value for the background. Our current code outputs the averages of each image, but maintains the ability to output specific viabilities, sizes, and intensity values for each invidivual spheroid identified in a given image.  
 
 
-
-
-### Python requirements
-
-* Python >= 3.9
-* Pytorch >= 2.0
-* Pillow >= 9.4.0
-* matplotlib >= 3.7.1
-* (Optional but highly recomended) cuda-toolkit = 11.8 
-* Conda installation
-
-
 ## Basic use
 
 
-Clone this repository
-
+1. Clone this repository
 ```
 git clone https://github.com/armanilab/SAAVY.git
 ```
 
 All folders (inputs, outputs, training, etc.) must be in the SAAVY directory. The following code is written to call from the working directory.
-
 ```
 cd SAAVY
 ```
 
 Download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and move it into the SAAVY folder.
 
-Create conda env 
-
-
+2. Create conda env 
 ```
 conda create -n torch python="INPUT YOUR PYTHON VERSION"
 conda activate torch
 ```
-If you are running mac, you will need to install pytorch with the following command
+
+If you are running MAC, you will need to install pytorch with the following command
 ```
 pip3 install torch torchvision torchaudio
 ```
-Otherwise for windows
+
+Otherwise for WINDOWS
 ```
 // GPU install requires CUDA toolkit https://developer.nvidia.com/cuda-toolkit
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -53,10 +39,19 @@ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvi
 conda install pytorch torchvision torchaudio cpuonly -c pytorch
 ```
 
-Other requirements
+Other requirements (MAC & WINDOWS)
 ```
 pip3 install matplotlib scikit-learn pillow tqdm pandas opencv-python
 ```
+
+ After install, please check for the following:
+
+* Python >= 3.9
+* Pytorch >= 2.0
+* Pillow >= 9.4.0
+* matplotlib >= 3.7.1
+* Conda installation
+* (Optional but highly recomended) cuda-toolkit = 11.8 (ONLY IF RUNNING NVIDIA GPU)
 
 
 Run the analysis 
