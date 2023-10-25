@@ -12,7 +12,7 @@ SAAVY outputs the viability percent, average spheroid size, total count of spheo
 * Python >= 3.9
 * Pytorch >= 2.0
 * Pillow >= 9.4.0
-* mattplotlib >= 3.7.1
+* matplotlib >= 3.7.1
 * (Optional but highly recomended) cuda-toolkit = 11.8 
 * Conda installation
 
@@ -28,11 +28,11 @@ cd SAAVY
 ```
 Download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and move it into the SAAVY folder.
 
-Create conda env
+Create conda env 
 
 
 ```
-conda env create -n torch python=3.9
+conda env create -n torch python="input your python version"
 conda activate torch
 ```
 If you are running mac, you will need to install pytorch with the following command
