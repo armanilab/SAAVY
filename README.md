@@ -24,8 +24,14 @@ Clone this repository
 
 ```
 git clone https://github.com/armanilab/SAAVY.git
+```
+
+All folders (inputs, outputs, training, etc.) must be in the SAAVY directory. The following code is written to call from the working directory.
+
+```
 cd SAAVY
 ```
+
 Download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and move it into the SAAVY folder.
 
 Create conda env 
