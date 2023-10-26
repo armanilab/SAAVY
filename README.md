@@ -22,7 +22,7 @@ Download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8
 
 2. Create conda env 
 ```
-conda create -n torch python="INPUT YOUR PYTHON VERSION"
+conda create -n torch python="3.9"
 conda activate torch
 ```
 
