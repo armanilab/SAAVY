@@ -39,7 +39,7 @@ from torchScripts.engine import train_one_epoch, evaluate
 
 class OrganoidDataset(torch.utils.data.Dataset):
     """
-    flow curtosy of pytorch.org's finetuning documentation
+    flow courtesy of pytorch.org's finetuning documentation
     """
 
     def loadMasks(self, root):
