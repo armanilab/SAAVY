@@ -60,25 +60,26 @@ python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --m
 ```
 
 ## Fine tune model
-1. download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
+1. Download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
    This will download a file to your computer with a name according to the version (via-2.0.11), open the folder and click via.html to run the program
    
-2. load images into dataset (add files in the annotator window) and create masks around them
-   Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample
+2. Load images into dataset (add files in the annotator window) and create masks around them. /n
+   Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
    For example:
 
 ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
-3. Export as JSON. **Name it**  `via_region_data.json`
-
+3. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files.
 ![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
 
-4. Copy both JSON and annotated images into training directory, 
+4. **Name it** for example: `via_region_data.json`
 
-5. Repeat from step 2 for validation dataset
+5. Copy both JSON and annotated images into training directory, 
 
-6. run `python training.py --training "training/" --validation "validation/"`
+6. Repeat from step 2 for validation dataset
 
-7. model will be saved to working directory
+7. run `python training.py --training "training/" --validation "validation/"`
+
+8. model will be saved to working directory
 
 
