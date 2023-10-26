@@ -218,8 +218,21 @@ images = []
 images_meta = []
 
 for file in tqdm(files):
-    if not (file.endswith(".jpg") or file.endswith(".png")):
+    if not (file.endswith(".jpg") or file.endswith(".png") or file.endswith(".tiff") or file.endswith(".tif")):
         continue
+    
+    # check image resolution and resize to max 1290x1290 mataining aspect ratio
+    img = cv2.imread(os.path.join(folder,file))
+    if img.shape[0] > 1290 or img.shape[1] > 1290:
+        scale = min(1290/img.shape[0], 1290/img.shape[1])
+        img = cv2.resize(img, (0,0), fx=scale, fy=scale)
+        # write it into temp directory
+        print("resizing image: ", file)
+        if not os.path.exists(os.path.join(folder, "temp")):
+            os.mkdir(os.path.join(folder, "temp"))
+        cv2.imwrite(os.path.join(folder, "temp", file), img)
+        file = os.path.join("temp",file)
+        # continue
     print(file)
     image, cells, backgroundIntensity = segment_instance(
         os.path.join(folder,file), confidence_thresh=0.8
@@ -240,8 +253,13 @@ for file in tqdm(files):
 
 
 timeEnd = time.time()
-print("time taken: ", timeEnd - timeStart)
-print("time taken per image: ", (timeEnd - timeStart) / len(files))
+print("Time taken: ", timeEnd - timeStart)
+print("Time taken per image: ", (timeEnd - timeStart) / len(files))
+print("Removing temp files...")
+if os.path.exists(os.path.join(folder, "temp")):
+    for file in os.listdir(os.path.join(folder, "temp")):
+        os.remove(os.path.join(folder, "temp", file))
+    os.rmdir(os.path.join(folder, "temp"))
 
 # path = os.path.join(folder, "out")
 path = args.output
