@@ -6,7 +6,7 @@ SAAVY outputs the viability percent, average spheroid size, total count of spheo
 
 
 ## Basic use
-
+Follow these instructions for use of SAAVY with cycstic-type spheroids. Instructions for training images specifically according to your spheroid type (if of a differing morphology) are included below in the 'Fine Tune Model' section.
 
 1. Clone this repository
 ```
@@ -44,7 +44,7 @@ Other requirements (MAC & WINDOWS)
 pip3 install matplotlib scikit-learn pillow tqdm pandas opencv-python
 ```
 
- After install, please check for the following:
+After install, please check for the following:
 
 * Python >= 3.9
 * Pytorch >= 2.0
@@ -54,14 +54,18 @@ pip3 install matplotlib scikit-learn pillow tqdm pandas opencv-python
 * (Optional but highly recomended) cuda-toolkit = 11.8 (ONLY IF RUNNING NVIDIA GPU)
 
 
-Run the analysis 
+4. Run the analysis 
 ```
 python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --model "torchFinal.pt"
 ```
 
 ## Fine tune model
 1. download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
-2. load images into dataset and create polygon masks around them
+   This will download a file to your computer with a name according to the version (via-2.0.11), open the folder and click via.html to run the program
+   
+2. load images into dataset (add files in the annotator window) and create masks around them
+   Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample
+   For example:
 
 ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
