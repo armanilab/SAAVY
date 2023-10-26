@@ -8,6 +8,9 @@ The following document includes instructions for using SAAVY using example data 
 
 
 ## Instructions for Use
+Note: All proceeding steps require Conda installation. 
+
+Check for conda installation **OR** follow [directions to install conda](https://conda.io/docs/user-guide/install/) 
 
 1. Clone this repository using your devices terminal or IDE of choice:
 ```
@@ -20,7 +23,11 @@ cd SAAVY
 ```
 All folders (inputs, outputs, training, etc.) must be in the SAAVY directory. The following code is written to call from the working directory.
 
-3. Download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
+3a. If you are following our example/using similar cycstic spheroids: 
+    
+    download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
+
+3b. If you are training your own images, skip this step.
 
 4. Create virtual enviornment:
 ```
@@ -53,7 +60,6 @@ After install, please check for the following:
 * Pytorch >= 2.0
 * Pillow >= 9.4.0
 * matplotlib >= 3.7.1
-* Conda installation
 * (Optional but highly recomended) cuda-toolkit = 11.8 (ONLY IF RUNNING NVIDIA GPU)
 
 6a. If using our example images and training data, run SAAVY viability analysis using:
@@ -92,8 +98,12 @@ If using your own images, follow the following steps -->
 
 13. Move the validation images into the validation directory "validationData"
 
-14. run `python training.py --training "training/" --validation "validation/"`
+14. Install packages for training script:
+    ```
+    pip3 install 
+    ```
+16. run `python training.py --training "training/" --validation "validation/"`
 
-15. model will be saved to working directory
+17. model will be saved to working directory
 
 
