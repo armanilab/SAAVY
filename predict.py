@@ -156,7 +156,6 @@ def segment_instance(
             "perimeter": perimeter,
         }
         cells.append(cell_meta)
-    print("background intensity: ", backgroundIntesity)
     return img, cells, backgroundIntesity
 
 
@@ -188,7 +187,6 @@ def calcBackgroundIntensity(img, masks) -> float:
     # ignore everything greater than 250
 
     avg = np.average(masked)
-    print(avg)
 
     return avg
 
@@ -233,7 +231,6 @@ for file in tqdm(files):
         cv2.imwrite(os.path.join(folder, "temp", file), img)
         file = os.path.join("temp",file)
         # continue
-    print(file)
     image, cells, backgroundIntensity = segment_instance(
         os.path.join(folder,file), confidence_thresh=0.8
     )
