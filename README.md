@@ -63,7 +63,7 @@ python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --m
 1. Download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
    This will download a file to your computer with a name according to the version (via-2.0.11), open the folder and click via.html to run the program
    
-2. Load images into dataset (add files in the annotator window) and create masks around them. /n
+2. Load images into dataset (add files in the annotator window) and create masks around them.
    Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
    For example:
 
