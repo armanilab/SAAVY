@@ -100,7 +100,7 @@ If using your own images, follow the following steps -->
 
 14. Install packages for training script:
     ```
-    pip3 install 
+    pip3 install pycocotools tensorboard
     ```
 16. run ```python training.py --training "training/" --validation "validation/"```
 
