@@ -108,7 +108,7 @@ If using your own images, follow the following steps -->
     ```
 15. Run
     ```
-    python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"
+    python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLDER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"
     ```
 
 17. The model will be saved to your working directory
