@@ -102,7 +102,7 @@ If using your own images, follow the following steps -->
     ```
     pip3 install 
     ```
-16. run `python training.py --training "training/" --validation "validation/"`
+16. run ```python training.py --training "training/" --validation "validation/"```
 
 17. model will be saved to working directory
 
