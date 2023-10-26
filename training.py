@@ -18,10 +18,10 @@ import random
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("training", help="training folder")
-parser.add_argument("validation", help="validation folder")
-parser.add_argument("training_json", help="training json file")
-parser.add_argument("validation_json", help="validation json file")
+parser.add_argument("--training", help="training folder")
+parser.add_argument("--validation", help="validation folder")
+parser.add_argument("--training_json", help="training json file")
+parser.add_argument("--validation_json", help="validation json file")
 args = parser.parse_args()
 # import scripts.pytorchVisionScripts.utils as utils
 # from scripts.pytorchVisionScripts.engine import *
