@@ -84,12 +84,16 @@ If using your own images, follow the following steps -->
 
 9. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
 
+    You will have to do this twice: once for your training data, once for your validation data.
+
    Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
    For example:
 
 ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
 10. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files.
+    
+    You will have to do this twice: once for your training data, once for your validation data.
 ![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
 
 11. **Rename the annotator JSON file**: `via_region_data.json`
@@ -102,8 +106,9 @@ If using your own images, follow the following steps -->
     ```
     pip3 install pycocotools tensorboard
     ```
-16. run ```python training.py --training "training/" --validation "validation/"```
+15. Run
+    ```python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"```
 
-17. model will be saved to working directory
+16. The model will be saved to your working directory
 
 
