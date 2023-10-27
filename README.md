@@ -23,9 +23,7 @@ cd SAAVY
 ```
 All folders (inputs, outputs, training, etc.) must be in the SAAVY directory. The following code is written to call from the working directory.
 
-3a. If you are following our example/using similar cycstic spheroids: 
-    
-download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
+3a. If you are following our example/using similar cycstic spheroids: download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
 
 3b. If you are training your own images, skip this step.
 
