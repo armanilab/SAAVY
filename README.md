@@ -80,9 +80,10 @@ If using your own images, follow the following steps -->
    
 8. Load images into VIA (add files button in the annotator window).
 
+   Images must be PNG of JPG format. We suggest opening images on your device and export from the viewer to PNG or JPG format. 
    We used 30 images for our balanced training/validation image subset with an 80%/20% split.
 
-9. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
+10. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
 
     You will have to do this twice: once for your training data, once for your validation data.
 
