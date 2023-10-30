@@ -23,9 +23,7 @@ cd SAAVY
 ```
 All folders (inputs, outputs, training, etc.) must be in the SAAVY directory. The following code is written to call from the working directory.
 
-3a. If you are following our example/using similar cycstic spheroids: 
-    
-    download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
+3a. If you are following our example/using similar cycstic spheroids: download the [model](https://drive.google.com/file/d/1NHOs9vxCup87TkMIZ8YFBuY9j8nx1NmH/view?usp=share_link) and save it to the SAAVY folder.
 
 3b. If you are training your own images, skip this step.
 
@@ -80,16 +78,19 @@ If using your own images, follow the following steps -->
    
 8. Load images into VIA (add files button in the annotator window).
 
+   Images must be PNG of JPG format. We suggest opening images on your device and export from the viewer to PNG or JPG format. 
    We used 30 images for our balanced training/validation image subset with an 80%/20% split.
 
-9. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
+10. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
 
-   Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
-   For example:
+    You will have to do this twice: once for your training data, once for your validation data.
 
-![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
+    Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
+   For example: ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
 10. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files.
+    
+    You will have to do this twice: once for your training data, once for your validation data.
 ![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
 
 11. **Rename the annotator JSON file**: `via_region_data.json`
@@ -100,10 +101,13 @@ If using your own images, follow the following steps -->
 
 14. Install packages for training script:
     ```
-    pip3 install 
+    pip3 install pycocotools tensorboard
     ```
-16. run ```python training.py --training "training/" --validation "validation/"```
+15. Run
+    ```
+    python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLDER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"
+    ```
 
-17. model will be saved to working directory
+17. The model will be saved to your working directory
 
 
