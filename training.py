@@ -99,8 +99,6 @@ class OrganoidDataset(torch.utils.data.Dataset):
         # create a new variable for the image that is converted to (or from) RGB ? - KT
         img = PIL.Image.open(imagePath).convert("RGB")
 
-        # why is this mask differnt than the other masks above? would that interfere with calling the other mask varioable (even though these are within functions)?
-        # if they are different, I would personally rename the variables so that others who read through the code don't get confused
         mask = self.masks[self.imgs[idx]]
 
         # mask is a dictionary of all x points and all y points. we have to convert these to a binary mask
