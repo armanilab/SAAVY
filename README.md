@@ -88,22 +88,22 @@ If using your own images, follow the following steps -->
     Use either the circle, ellipse, or polygon tool to trace the edges of the spheroids of interest, whichever is appropriate to the shape of your sample.
    For example: ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
-10. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files.
+10. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files. Go to do annotations menu and use the JSON dropdown option.
     
     You will have to do this twice: once for your training data, once for your validation data.
 ![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
 
-11. **Rename the annotator JSON file**: `via_region_data.json`
+12. **Rename the annotator JSON file**: `via_region_data.json`
 
-12. Move the annotator JSON file and training images into the training directory "trainingData"
+13. Move the annotator JSON file and training images into the training directory "trainingData"
 
-13. Move the validation images into the validation directory "validationData"
+14. Move the validation images into the validation directory "validationData"
 
-14. Install packages for training script:
+15. Install packages for training script:
     ```
     pip3 install pycocotools tensorboard
     ```
-15. Run
+16. Run
     ```
     python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLDER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"
     ```
