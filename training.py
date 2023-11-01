@@ -143,11 +143,9 @@ class OrganoidDataset(torch.utils.data.Dataset):
         # transform the masks to a tensor
         masks = torch.as_tensor(masks, dtype=torch.uint8)
 
-        # labelling each box with an ID number that indexes with the number of each mask - KT
         image_id = torch.tensor([idx])
 
-        # we need this because cocodataset has crowd (single instance) to be zero
-        # iscrowd is used for ... - KT
+        # we need this because cocodataset has crowd (single instance) to be zero, we can just set this to zero and ignore it
         iscrowd = torch.zeros(
             (numObjs,), dtype=torch.int64
         )
