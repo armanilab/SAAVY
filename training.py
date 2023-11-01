@@ -1,30 +1,22 @@
-# if you're noting information overviewing the following model, please highlight that here
 #!/usr/bin/env python
 # coding: utf-8
-
-
-# what is this debug cell for? we're publishing final code, we shouldn't have any of this - KT
-# In[1]:
-
-# make sure that you're loading ALL packages that you use throughout the document here first so that people who look at it to use can easily check for installation - KT
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
-
+from torch.utils.tensorboard import SummaryWriter
+import torchvision.transforms.functional as TF
+from torchScripts import utils
+from torchScripts.engine import train_one_epoch, evaluate
 import torch
 import torch.utils.data
 import json
 import os
-# why use PIL? Isn't this depricated after Python 2? We load pillow, so shouldn't we just run from pillow? - KT
 import PIL
 import numpy as np
 import random
 import argparse
 
-'''
-The code isn't annotated... 
-I'm going to annotate based on my understanding of what you are doing, if I am wrong please correct.
-'''
+
 
 # Here, we are establishing the arguments that are required for user input when running the code
 # There are four requirements:
@@ -33,81 +25,55 @@ parser.add_argument("--training", help="training folder")
 parser.add_argument("--validation", help="validation folder")
 parser.add_argument("--training_json", help="training json file")
 parser.add_argument("--validation_json", help="validation json file")
-# Are the training and validation json files the same? - KT 
+ 
 
 args = parser.parse_args()
-# if the following is retired code, please remove it - KT
-# import scripts.pytorchVisionScripts.utils as utils
-# from scripts.pytorchVisionScripts.engine import *
 
-from torch.utils.tensorboard import SummaryWriter
 
-# assuming that you're inputting this for a specific read/write function to wrap the ML? - KT
+# setup logging so we can view the training progress in tensorboard
 writer = SummaryWriter()
 
-# keep all imports together at the beginning of the document - KT
-# and note the grouping of imports and what they are for - KT
-import torchvision.transforms.functional as TF
-from torchScripts import utils
-from torchScripts.engine import train_one_epoch, evaluate
 
-# In[2]:
 
-# note what this is for and what you are doing here - KT
 class OrganoidDataset(torch.utils.data.Dataset):
     """
-    flow courtesy of pytorch.org's finetuning documentation
-    # if there is a link, I would inlcude the link here to easily get to the documentation that you are talking about - KT
+    Used to train the model on the organoid dataset
+    https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
     """
 
     def loadMasks(self, root):
         masks = {}
         fsImages = os.listdir(os.path.join(root))
-        # what are you doing here? This is what is erroring when I try running the training script, so you might need to change this for a more efficient manner of calling the masks
+        # load the json file containing the annotations
         with open(os.path.join(root, self.via)) as f:
-            # loading the data from the json file upload
+           #parse it into json
             data = json.load(f)
-            for key in data: # iterating through every dictionary(?) in the uplaoded json file?? Is this true? What is the "key" here bc the json file is tricky to understand what you're looping through
+            # Each json will contain a list of files, each file will conain a list of regions (annotated organoids) each region will have a list of x points and a list of y points
+            # lots of looping to get the data into a format that we can use
+            for key in data: # 
+                # check if there is a OS file corresponding to the current file we have from json
                 if data[key]["filename"] in fsImages:
-                    # check if regions exist is empty and if so remove the image from the list
-                    # TODO: make it so that null images can be used for training
-                    # is that TODO still outstanding? If it's not, clear it from the code - KT
                     if data[key]["regions"] == []:
-                        # self.imgs.remove(data[key]["filename"])
-                        # remove outdated code - KT
-                        pass
-                    else:
-                        masks[data[key]["filename"]] = data[key]["regions"]
-# Why is this chunk here? If it's elftover from your code build where you are debugging, can you remove this? We want to publishe/release cleaned code
+                        continue
+                    
+                      # using the filename as a key, we set the vallue to the json list of regions
+                    masks[data[key]["filename"]] = data[key]["regions"]
+
         return masks
 
-# note what this function is doing - KT 
+# on construction, we load masks from file and the image paths form the json
     def __init__(self, root, via, shouldtransforms=False):
         self.root = root
         self.via = via
         self.shouldtransforms = shouldtransforms
-        # load all image files, sorting them to
-        # ensure that they are aligned
         files = os.listdir(os.path.join(root))
-        # ignrore all .json files
-        # note why - KT
         self.masks = self.loadMasks(root)
         self.imgs = list(self.masks.keys())
 
-# note what this function is doing - KT
-# remove all of the retired code - KT
-# why are you resizing all of these things? - KT
+# for increased model generalization, we can augment data by flipping 
+# this attempts to increase the number of training examples
     def transform(self, image, mask):
-        # # Resize
-        # resize = transforms.Resize(size=(520, 520))
-        # image = resize(image)
-        # mask = resize(mask)
 
-        # # Random crop
-        # i, j, h, w = transforms.RandomCrop.get_params(
-        #     image, output_size=(512, 512))
-        # image = TF.crop(image, i, j, h, w)
-        # mask = TF.crop(mask, i, j, h, w)
 
         # Random horizontal flipping
         if random.random() > 0.5:
@@ -124,10 +90,10 @@ class OrganoidDataset(torch.utils.data.Dataset):
         mask = TF.to_tensor(mask)
         return image, mask
 
-# what does this section do? - KT
+# returns a mask and image for a given index used for training
     def __getitem__(self, idx):
 
-        # get image path?
+        # get the image we are working with
         imagePath = os.path.join(self.root, self.imgs[idx])
 
         # create a new variable for the image that is converted to (or from) RGB ? - KT
@@ -142,7 +108,7 @@ class OrganoidDataset(torch.utils.data.Dataset):
             img, target = self.transform(img, mask)
         masks = []
 
-        # this loop is.... fill this out - KT
+        # mask contains a list of regions (annotated organoids), we want to deal with each region separately
         for key in mask:
             points = key["shape_attributes"]
             x = points["all_points_x"]
@@ -213,23 +179,20 @@ def main():
     # do we need different commands for GPU v CPU in the instructions if there is this check for the devices here already - KT
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-    # creating the model taking in a variable containing the number of classes - KT
+ 
     def buildModel(numClasses):
 
-        # calling the prebuilt model architecture from Mask R-CNN - KT
+        # start with pretrained MRCNN model form COOCO dataset
         model = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
 
-        # what's going on here? - KT
+        # save the number of input features for the classifier
         inFeatures = model.roi_heads.box_predictor.cls_score.in_features
 
-        # we are also calling the bounding boxes from Fast R-CNN (is this different?) to give us the outlines of the identified spheroids - KT
+        # replace box predictor of pretrained mrcnn with new one that we will train
         model.roi_heads.box_predictor = FastRCNNPredictor(inFeatures, numClasses)
-
-        # obtaining all of the features in the mask - KT
         inFeaturesMask = model.roi_heads.mask_predictor.conv5_mask.in_channels
 
-        # setting the total number of hidden layers for the NN architecture
-        # how did you decide on this value? - KT
+        # recomend using 256 for hidden layer, can be changed if needed but between size of input and output
         hiddenLayer = 256
 
         # getting the masks for the prediction from the image! 
@@ -239,8 +202,8 @@ def main():
         return model
 
 
-    ### if this section is commented out, can we delete it? - KT
-    ### if eventually this could be useful and you want to keep it, please note the instance in which this should be uncommented - KT
+    ### data augmentation, not needed for our dataset, however if there is difficulty with traaining
+    # or generalization, this can be used to augment the data
     # def getTransform(train):
     #     transforms = []
     #     transforms.append(T.ToTensor())
@@ -249,77 +212,41 @@ def main():
     #         transforms.append(T.RandomHorizontalFlip(0.5))
     #     return T.Compose(transforms)
 
-    # split the dataset in train and test set
-    def trainTestSplit():
-        folder = "trainingData"
-        # check if trainingData/train and trainingData/test exist
-        if not os.path.exists(os.path.join(folder, "train")):
-            os.mkdir(os.path.join(folder, "train"))
+   
 
-        if not os.path.exists(os.path.join(folder, "test")):
-            os.mkdir(os.path.join(folder, "test"))
-
-        # copy 10% of the images to the test folder
-        for file in os.listdir(os.path.join(folder, "images")):
-            if np.random.rand(1) < 0.1:
-                os.rename(
-                    os.path.join(folder, "images", file),
-                    os.path.join(folder, "test", file),
-                )
-                os.rename(
-                    os.path.join(folder, "via_region_data.json"),
-                    os.path.join(folder, "test", "via_region_data.json"),
-                )
-            else:
-                os.rename(
-                    os.path.join(folder, "images", file),
-                    os.path.join(folder, "train", file),
-                )
-                os.rename(
-                    os.path.join(folder, "via_region_data.json"),
-                    os.path.join(folder, "train", "via_region_data.json"),
-                )
-
-    # we have a train test split so we dont need to do this
-    ### if we don't need to do the above, why do we have this in the code? I would remove this and/or comment it out with a note that a user can uncoment this if they decide to edit things here
-
-
-    dataset = OrganoidDataset(args.training, args.training_json, False) # i would specify training dataset in the name since you refer to dataset earlier in the OrganoidDataset code, explicit is better for others to follow
+    dataset = OrganoidDataset(args.training, args.training_json, False)
     validationDataset = OrganoidDataset(args.validation, args.validation_json, False)
 
-    # loading in the data from ???
+    # training/valdiaton dataloaders using our datasets
     dataLoader = torch.utils.data.DataLoader(
         dataset, 
         batch_size=2, 
         shuffle=True, 
         num_workers=0, 
-        collate_fn=utils.collate_fn # do you need a comma here ?? There's one at the end of the other code... maybe this is the training data error?????? - KT
+        collate_fn=utils.collate_fn 
     )
 
-    # stay consistent in how you format your code, this is different than the above 
-    # I changed the above to match since I usually code in this manner for clarity - KT
     validationDataLoader = torch.utils.data.DataLoader(
         validationDataset,
         batch_size=1,
         shuffle=False,
         num_workers=0,
-        collate_fn=utils.collate_fn,
+        collate_fn=utils.collate_fn
     )
 
-    # I thought you said there was one class earlier? - KT
+    # 2 classes technically, background (which we wont consider) and organoid
     num_classes = 2
 
-    # this step packages the model for export? - KT
+    # get get our custom MRCNN model and move it to GPU if we have one, otherwise CPU
     model = buildModel(num_classes)
     model.to(device)
 
-    # what is this and why are you introducting this after you already create and export the model?? - KT
+    # select only those parameters of the model that need to be learned or adjusted 
     params = [p for p in model.parameters() if p.requires_grad]
+    #standard optimizer with MRCNN default parameters. No scheduler.
     optimizer = torch.optim.SGD(params, lr=0.001, momentum=0.9, weight_decay=0.0001)
 
-    # explain how you got to this choice of epochs - KT
-    # is this something that other would have to change to train their own data? - KT
-    # if yes to the above, make a note of this and what epoch number you recommend starting off with - KT
+    # recomend starting with 15 epochs, increase if needed however model will overfit if you do too many epochs
     num_epochs = 15
 
     for epoch in range(num_epochs):
@@ -327,14 +254,13 @@ def main():
         train_one_epoch(
             model, optimizer, dataLoader, device, epoch, writer, print_freq=1
         )
-        # lr_scheduler.step() -- if you don't use this, remove this from the code - KT
         evaluate(model, validationDataLoader, writer, epoch, device=device)
 
     # exporting the final, trained model for the data
     # change the name of this as appropraite to your model 
     torch.save(model, "torchDebug01.1.pt")
 
-# what does this section do? please explain - KT
+#  only execute if ran as script, not if imported as module
 if __name__ == "__main__":
     main()
     writer.flush()
