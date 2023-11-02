@@ -46,7 +46,7 @@ class OrganoidDataset(torch.utils.data.Dataset):
         fsImages = os.listdir(os.path.join(root))
         # load the json file containing the annotations
         with open(os.path.join(root, self.via)) as f:
-           #parse it into json
+           # parse it into json
             data = json.load(f)
             # Each json will contain a list of files, each file will conain a list of regions (annotated organoids) each region will have a list of x points and a list of y points
             # lots of looping to get the data into a format that we can use
@@ -56,7 +56,7 @@ class OrganoidDataset(torch.utils.data.Dataset):
                     if data[key]["regions"] == []:
                         continue
                     
-                      # using the filename as a key, we set the vallue to the json list of regions
+                    # using the filename as a key, we set the value to the json list of regions
                     masks[data[key]["filename"]] = data[key]["regions"]
 
         return masks
@@ -96,7 +96,7 @@ class OrganoidDataset(torch.utils.data.Dataset):
         # get the image we are working with
         imagePath = os.path.join(self.root, self.imgs[idx])
 
-        # create a new variable for the image that is converted to (or from) RGB ? - KT
+        # create a new variable for the image that is converted to RGB
         img = PIL.Image.open(imagePath).convert("RGB")
 
         mask = self.masks[self.imgs[idx]]
@@ -123,7 +123,7 @@ class OrganoidDataset(torch.utils.data.Dataset):
         numObjs = len(masks)
         boxes = []
 
-        # creating a bounding box around the identified region/mask - KT
+        # creating a bounding box around the identified region/mask
         for i in range(numObjs):
             pos = np.where(masks[i])
             xmin = np.min(pos[1])
@@ -172,7 +172,6 @@ class OrganoidDataset(torch.utils.data.Dataset):
 
 # this function does ... - KT
 def main():
-    # do we need different commands for GPU v CPU in the instructions if there is this check for the devices here already - KT
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
  
@@ -198,7 +197,7 @@ def main():
         return model
 
 
-    ### data augmentation, not needed for our dataset, however if there is difficulty with traaining
+    ### data augmentation, not needed for our dataset, however if there is difficulty with training
     # or generalization, this can be used to augment the data
     # def getTransform(train):
     #     transforms = []
@@ -230,7 +229,7 @@ def main():
         collate_fn=utils.collate_fn
     )
 
-    # 2 classes technically, background (which we wont consider) and organoid
+    # 2 classes technically, background (which we don't consider) and organoid
     num_classes = 2
 
     # get get our custom MRCNN model and move it to GPU if we have one, otherwise CPU
@@ -239,7 +238,7 @@ def main():
 
     # select only those parameters of the model that need to be learned or adjusted 
     params = [p for p in model.parameters() if p.requires_grad]
-    #standard optimizer with MRCNN default parameters. No scheduler.
+    # standard optimizer with MRCNN default parameters. No scheduler.
     optimizer = torch.optim.SGD(params, lr=0.001, momentum=0.9, weight_decay=0.0001)
 
     # recomend starting with 15 epochs, increase if needed however model will overfit if you do too many epochs
