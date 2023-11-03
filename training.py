@@ -160,17 +160,15 @@ class OrganoidDataset(torch.utils.data.Dataset):
         target["iscrowd"] = iscrowd
         target["area"] = area
 
-        # converting the image to tensor (again??) - KT
-        # does this take into account other data/bounding boxes that you just created earlier?
         img = TF.to_tensor(img)
 
         return img, target
 
-    # what is this funciton for? - KT
+    # returns the length of the dataset
     def __len__(self):
         return len(self.imgs)
 
-# this function does ... - KT
+# main driver function that runs the training
 def main():
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
