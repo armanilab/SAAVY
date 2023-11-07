@@ -320,21 +320,17 @@ df = pd.DataFrame()
 # storing information in the dataframe for export
 for image in images_meta:
 
-    # in the case where NO spheroid is identified in an image - KT
-    if image["cells"] == []:
-        avg_viability = -1
-        avg_circularity = -1
-        avg_intensity = -1
-        avg_area = -1
-
-    # ***
-    # I would personally clean this up a bit and make the order of these flow a bit better, for example:
-    # Cell Count, Avg Intensity, Avg Viability, Avg Perimeter, Avg Area, Avg Circularity
-    # intensity is calculated to get the viability
-    # perimeter and area are used to get the circularity  - KT
-    # ***
-    else:
+    # in the case where NO spheroid is identified in an image 
+    avg_area = -1
+    avg_perimeter = -1
+    avg_circularity = -1
+    avg_intensity = -1
+    avg_viability = -1
+    num_cells = 0
+    if image["cells"] != []:
+    
         num_cells = len(image["cells"])
+        
         avg_viability = np.average(
             [cell["viability"] for cell in image["cells"]]
         ).round(2)
