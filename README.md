@@ -60,7 +60,7 @@ After install, please check for the following:
 * matplotlib >= 3.7.1
 * (Optional but highly recomended) cuda-toolkit = 11.8 (ONLY IF RUNNING NVIDIA GPU)
 
-6a. If using our example images and training data, run SAAVY viability analysis using:
+6a. If using our example images and training data, or if **your samples are of cystic spheroid type**, run SAAVY viability analysis using:
 ```
 python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --model "torchFinal.pt"
 ```
@@ -68,7 +68,7 @@ And stop here - you're done!
 
 
 ## Fine tune the model
-If using your own images, follow the following steps --> 
+If using your own images, **of a cryptic spheroid type**, follow the following steps --> 
 
 6b. Download the [VIA image annotator 2.0.11](https://www.robots.ox.ac.uk/~vgg/software/via/)
 
@@ -81,32 +81,30 @@ If using your own images, follow the following steps -->
    Images must be PNG of JPG format. We suggest opening images on your device and export from the viewer to PNG or JPG format. 
    We used 30 images for our balanced training/validation image subset with an 80%/20% split.
 
-10. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze.
+9. Create masks around the regions (spheroids/organoids) you are interested in having SAAVY analyze. Use the polygon tool to trace the edges of the spheroids of interest. 
 
-    You will have to do this twice: once for your training data, once for your validation data.
-
-    Use the polygon tool to trace the edges of the spheroids of interest. 
    For example: ![.](https://images.duckarmada.com/5Qw1y2DW2t4s/direct.png)
 
 10. Export as JSON. This will export the file to your default downloads folder/same as the Via Annotator Files. Go to the annotations menu and use the JSON dropdown option.
-11. You will have to do this twice: once for your training data, and once for your validation data. You should have two folders, training and validation, each with their own images and annotation json.
-![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
+    ![](https://images.duckarmada.com/Rmr7SCBEhTOX/direct.png)
 
-12. **Rename the annotator JSON file**: `via_region_data.json`
+11. Rename the annotator JSON file according to which file type (training or validation)
+    
+12. **You will have to do this twice**: once for your training data, and once for your validation data. Repeat steps 8-11 for validation data. You should have two folders after, training and validation, each with their own images and annotation json files.
 
-13. Move the annotator JSON file and training images into the training directory "trainingData"
+13. Move the annotator JSON file and training images into a training directory i.e. "trainingData" Folder
 
-14. Move the validation images into the validation directory "validationData"
+14. Move the validation images into a validation directory i.e. "validationData" Folder
 
 15. Install packages for training script:
     ```
     pip3 install pycocotools tensorboard
     ```
+    
 16. Run
     ```
     python training.py --training "TRAINING FOLDER" --validation "VALIDATION FOLDER" --training_json "TRAINING ANNOTATIONS JSON" --validation_json "VALIDATION ANNOTATIONS JSON"
     ```
 
-17. The model will be saved to your working directory
-
+17. The model will be saved to your working directory to be used with the instructions 1-5 above
 
