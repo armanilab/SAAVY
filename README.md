@@ -4,7 +4,7 @@ SAAVY was created for the purpose of predicting the viability percentage of 3D t
 
 SAAVY outputs the viability percent, average spheroid size, total count of spheroids included in the analysis, the total percent area of the image analyzed, and the average intensity value for the background. Our current code outputs the averages of each image, but maintains the ability to output specific viabilities, sizes, and intensity values for each individual spheroid identified in a given image.  
 
-The following document includes instructions for using SAAVY using example data we provide (based on our [manuscript]()) and uploading your own data for training and analysis. Our example data is cycstic spheroids with clear and noisy backgrounds. The full image dataset is hosted on [Zenodo](). Instructions for training images specifically according to your spheroid type (if of a differing morphology) are included below in the 'Fine Tune Model' section.
+The following document includes instructions for using SAAVY using example data we provide (based on our [manuscript]()) and uploading your own data for training and analysis. Our example data is cycstic spheroids with clear and noisy backgrounds. The full image dataset is hosted on [Zenodo](10.5281/zenodo.10086367). Instructions for training images specifically according to your spheroid type (if of a differing morphology) are included below in the 'Fine Tune Model' section.
 
 
 ## Instructions for Use
