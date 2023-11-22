@@ -1,0 +1,69 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: SAAVY
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Kylie J.
+    family-names: Trettner
+    email: trettner@usc.edu
+    orcid: 'https://orcid.org/0000-0002-3168-2652'
+    affiliation: >-
+      University of Southern California, Viterbi School of
+      Engineering, Los Angeles, CA Ellison Institute of
+      Technology, Los Angeles, CA
+  - given-names: Jeremy
+    family-names: Hsieh
+    affiliation: 'Pasadena Polytechnic High School, Pasadena, CA'
+  - given-names: Weikun
+    family-names: Xiao
+    affiliation: Ellison Institute of Technology
+    orcid: 'https://orcid.org/0000-0003-3434-7961'
+  - given-names: Jerry S.H.
+    family-names: Lee
+    affiliation: >-
+      Ellison Institute of Technology, Los Angeles, CA,
+      University of Southern California, Viterbi School of
+      Engineering, Keck School of Medicine, Los Angeles, CA
+    orcid: 'https://orcid.org/0000-0003-1515-0952'
+  - given-names: Andrea M.
+    family-names: Armani
+    email: aarmani@eit.org
+    affiliation: >-
+      University of Southern California, Viterbi School of
+      Engineering, Los Angeles, CA Ellison Institute of
+      Technology, Los Angeles, CA
+    orcid: 'https://orcid.org/0000-0001-9890-5104'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.10086368
+    description: All images analyzed with the associated work
+  - type: other
+    value: 'arXiv:2311.09354'
+    description: ArXiv pre-print of the manuscript
+repository-code: 'https://github.com/armanilab/SAAVY'
+abstract: >-
+  SAAVY was created for the purpose of predicting the
+  viability percentage of 3D tissue cultures, cystic
+  spheroids specifically, according to brightfield
+  microscopy plane slice images. SAAVY uses Mask R-CNN for
+  instance, segmentation to detect the spheroids in the
+  focal plane within a provided image. Morphology is taken
+  into account through our training with both live and dead
+  spheroids. Live spheroids are distinctly spherical with
+  noticeable edges, whereas dead spheroids have a jagged
+  outline from the apototic cell death. We based the
+  viability algorithm on human expert assessment and
+  measured the intensity of the spheroid as compared to the
+  background. Spheroids that have higher viabilities are
+  typically closer in intensity values to that of the
+  background, on average. Further, we include artificial
+  noise in the backgrounds of the images to increase SAAVY's
+  tolerance in the case of noisy biological backgrounds
+  (i.e. matrix protein deposits, matrices loaded with
+  foreign materials, and/or co-cultured cells creating a
+  background).
