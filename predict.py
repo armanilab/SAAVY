@@ -118,7 +118,7 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
     for i in range(len(masks)):
         pt1 = tuple(map(int, boxes[i][0]))
         pt2 = tuple(map(int, boxes[i][1]))
-
+        x2, y2 = pt1
         x, y = pt2
 
         contours, _ = cv2.findContours(
@@ -165,6 +165,15 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
             (0, 0, 0),
             1,
         )
+        cv2.putText(
+            img,
+            str(i),
+            (int(x2+10), int(y2+10)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (20, 20, 20),
+            1,
+        )
         masked_image_out = cv2.putText(
             img,
             str(round(averageIntensity, 2)),
@@ -180,13 +189,13 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
 
 
         cell_meta = {
+            "id": i,
             "viability": viability,
             "circularity": circularity,
             "averageIntensity": averageIntensity,
             "area": area,
             "perimeter": perimeter,
         }
-
 
         cells.append(cell_meta)
     return img, cells, backgroundIntesity
@@ -243,7 +252,6 @@ if __name__ == "__main__":
     images = [] # images with cells highlighted
     images_meta = [] # cell metadata such as average viability
 
-    # note what this chunk of code does - KT
     for file in tqdm(files):
         if not (file.endswith(".jpg") or file.endswith(".png") or file.endswith(".tiff") or file.endswith(".tif")):
             continue
@@ -307,11 +315,11 @@ if __name__ == "__main__":
             print("error saving image: ", files[i])
 
     # make a new dataframe with empty everything so we can save to CSV
-    df = pd.DataFrame()
-
+    df = pd.DataFrame() # image level dataframe
+    cellDFs = []
     
     for image in images_meta:
-
+        cellDF = pd.DataFrame() # cell level dataframe
         # in the case where NO spheroid is identified in an image 
         avg_area = -1
         avg_perimeter = -1
@@ -334,7 +342,21 @@ if __name__ == "__main__":
             ).round(2)
             avg_area = np.average([cell["area"] for cell in image["cells"]]).round(2)
             avg_perimeter = np.average([cell["perimeter"] for cell in image["cells"]]).round(2)
-
+            for cell in image["cells"]:
+                cellDF = pd.concat([cellDF,
+                                    pd.DataFrame(
+                    {
+                        "id": [cell["id"]],
+                        "viability": [cell["viability"]],
+                        "circularity": [cell["circularity"]],
+                        "averageIntensity": [cell["averageIntensity"]],
+                        "area": [cell["area"]],
+                        "perimeter": [cell["perimeter"]],
+                    }
+                )],
+                ignore_index=True,  
+                )
+        cellDFs.append(cellDF)
 
         df = pd.concat([df,
             pd.DataFrame(
@@ -358,6 +380,11 @@ if __name__ == "__main__":
     #write the analysis out to CSV
     try:
         df.to_csv(os.path.join(path, "summary.csv"), index=False)
+        if not os.path.exists(os.path.join(path, "cells")):
+            os.mkdir(os.path.join(path, "cells"))
+
+        for i in range(len(cellDFs)):
+            cellDFs[i].to_csv(os.path.join(path, "cells", files[i] + ".csv"), index=False)
 
     except PermissionError:
         print("Please close the summary.csv file. press any key to continue")
