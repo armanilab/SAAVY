@@ -28,7 +28,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--input", help="folder of images to analyze")
 parser.add_argument("--output", help="folder to save output images")
 parser.add_argument("--model", help="path to model")
-
+parser.add_argument("--singleSphereoid", help="if true, will output additional sphereoid level info", action="store_true")
+parser.add_argument("--dist_penalty", default=60, type=float)
+parser.add_argument("--background_thresh", help="pixel intensity relation to background intensity", default=15, type=float)
 # parse and verify arguements
 args = parser.parse_args()
 if args.input is None or args.output is None:
@@ -59,7 +61,10 @@ def get_prediction(img_path, confidence):
             confidence, cutoff threshold for what is allowed as cell or not
     Returns: model output containing masks for image
     """
-    img = Image.open(img_path).convert("RGB")  # get rid of alpha channel incase image is png
+    # img = Image.open(img_path).convert("RGB")  # get rid of alpha channel incase image is png
+    img = cv2.imread(img_path) 
+    #get rid of alpha channel incase image is png
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     transform = T.Compose([T.ToTensor()])
     img = transform(img)
     img = img.to(device) #send image to either GPU or CPU as decided earlier
@@ -140,7 +145,7 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
         imgSave = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         imgSave = imgSave * masks[i]
 
-        viability, averageIntensity, area = analyzeCell(imgSave, backgroundIntesity)
+        viability, averageIntensity, area = analyzeCell(imgSave, backgroundIntesity, dist_penalty=args.dist_penalty, background_thresh=args.background_thresh)
 
         # Nonzero area isnt a cell so we can ignore it
         if area == 0:
@@ -231,12 +236,12 @@ def calcBackgroundIntensity(img, masks) -> float:
 
     return avg
 
-def analyzeCell(cell, backgroundIntensity):
+def analyzeCell(cell, backgroundIntensity, dist_penalty=60, background_thresh=15):
     area = np.count_nonzero(cell)
     cell = cell[cell != 0]  # ignore the completely black background
     averageIntensity = np.average(cell)
     cell_state = (
-        (60 - np.clip((backgroundIntensity - 15 - averageIntensity), 0, 60)) / 60
+        (dist_penalty - np.clip((backgroundIntensity - background_thresh - averageIntensity), 0, dist_penalty)) / background_thresh
     ) * 100
 
     return cell_state, averageIntensity, area
@@ -255,6 +260,7 @@ if __name__ == "__main__":
     for file in tqdm(files):
         if not (file.endswith(".jpg") or file.endswith(".png") or file.endswith(".tiff") or file.endswith(".tif")):
             continue
+ 
         
         # read in the image
         img = cv2.imread(os.path.join(folder,file))
@@ -272,6 +278,7 @@ if __name__ == "__main__":
 
             cv2.imwrite(os.path.join(folder, "temp", file), img)
             file = os.path.join("temp",file)
+  
 
         # analyze a single image
         image, cells, backgroundIntensity = segment_instance(
@@ -345,7 +352,7 @@ if __name__ == "__main__":
             for cell in image["cells"]:
                 cellDF = pd.concat([cellDF,
                                     pd.DataFrame(
-                    {
+                    {   "file": [image["file"]], #csv format
                         "id": [cell["id"]],
                         "viability": [cell["viability"]],
                         "circularity": [cell["circularity"]],
@@ -382,9 +389,9 @@ if __name__ == "__main__":
         df.to_csv(os.path.join(path, "summary.csv"), index=False)
         if not os.path.exists(os.path.join(path, "cells")):
             os.mkdir(os.path.join(path, "cells"))
-
-        for i in range(len(cellDFs)):
-            cellDFs[i].to_csv(os.path.join(path, "cells", files[i] + ".csv"), index=False)
+        if args.singleSphereoid:
+            for i in range(len(cellDFs)):
+                cellDFs[i].to_csv(os.path.join(path, "cells", files[i] + ".csv"), index=False)
 
     except PermissionError:
         print("Please close the summary.csv file. press any key to continue")
