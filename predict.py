@@ -140,7 +140,6 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
         
         # Draw the contours on the image
         cv2.drawContours(img, contours, -1, (0, 255, 0), rect_th)
-
         # get the average intensity of all pixels within mask
         imgSave = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         imgSave = imgSave * masks[i]
@@ -150,8 +149,6 @@ def segment_instance(img_path: str, confidence_thresh=0.5, rect_th=2, text_size=
         # Nonzero area isnt a cell so we can ignore it
         if area == 0:
             continue
-
-        # write the cell information to the input images
         cv2.putText(
             img,
             str(round(viability, 2)),
@@ -241,7 +238,7 @@ def analyzeCell(cell, backgroundIntensity, dist_penalty=60, background_thresh=15
     cell = cell[cell != 0]  # ignore the completely black background
     averageIntensity = np.average(cell)
     cell_state = (
-        (dist_penalty - np.clip((backgroundIntensity - background_thresh - averageIntensity), 0, dist_penalty)) / background_thresh
+        (dist_penalty - np.clip((backgroundIntensity - background_thresh - averageIntensity), 0, dist_penalty)) / dist_penalty
     ) * 100
 
     return cell_state, averageIntensity, area
