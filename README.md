@@ -64,6 +64,8 @@ After install, please check for the following:
 ```
 python predict.py --input "YOUR FOLDER HERE" --output "CREATE A FOLDER HERE" --model "torchFinal.pt"
 ```
+
+For single spheroid add "--singleSpheroid" to your command
 And stop here - you're done!
 
 
