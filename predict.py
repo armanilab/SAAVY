@@ -31,6 +31,7 @@ parser.add_argument("--model", help="path to model")
 parser.add_argument("--singleSphereoid", help="if true, will output additional sphereoid level info", action="store_true")
 parser.add_argument("--dist_penalty", default=60, type=float)
 parser.add_argument("--background_thresh", help="pixel intensity relation to background intensity", default=15, type=float)
+parser.add_argument("--confidence",default=0.8, help="model confidence value for cell")
 # parse and verify arguements
 args = parser.parse_args()
 if args.input is None or args.output is None:
@@ -279,7 +280,7 @@ if __name__ == "__main__":
 
         # analyze a single image
         image, cells, backgroundIntensity = segment_instance(
-            os.path.join(folder,file), confidence_thresh=0.8
+            os.path.join(folder,file), confidence_thresh=float(args.confidence)
         )
 
         image_total_px = image.shape[0] * image.shape[1] # calculate the total pixel area of the image 
